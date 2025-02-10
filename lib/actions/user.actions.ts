@@ -5,12 +5,15 @@ import { ID } from "node-appwrite";
 import { createAdminClient, createSessionClient } from "../appwrite";
 import { cookies } from "next/headers";
 import { parseStringify } from "../utils";
+import { signInProps } from "@/types";
 
-export const signIn = async () => {
+export const signIn = async ({email , password} : signInProps) => {
    
     try {
-        // Mutatation / Database / Make fetch.
-
+        
+      const { account } = await createAdminClient();
+      const response = await account.createEmailPasswordSession(email,password);
+      return parseStringify(response);
     } catch (error) {
         console.log('Error signing in:', error);
     }
@@ -58,3 +61,17 @@ export async function getLoggedInUser() {
     }
   }
   
+export const logoutAccount = async () => {
+
+  try{
+
+    const {account} = await createSessionClient();
+
+     (await cookies()).delete("appwrite-session");
+     await account.deleteSession("current");
+
+  } catch (error) {
+    return null;
+  }
+
+}

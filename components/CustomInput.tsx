@@ -30,7 +30,7 @@ const CustomInput: React.FC<CustomInput> = ({ control, name, label, placeholder 
               <input
                 placeholder={placeholder} // Use the 'placeholder' prop here
                 className='Input-class'
-                type={name === 'password' ? 'password' : 'text'}
+                type={name === 'password' ? 'password' : name === 'email' ? 'email' : 'text'}
                
                 
                 {...field}
